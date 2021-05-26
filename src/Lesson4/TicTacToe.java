@@ -7,9 +7,11 @@ public class TicTacToe {
     static final char EmptySlotSymbol = '-';
     public static void start() {
         char[][] field = {
-                {EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol},
-                {EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol},
-                {EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol}
+                {EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol},
+                {EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol},
+                {EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol},
+                {EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol},
+                {EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol}
         };
         DrawMatrix(field);
         do {
@@ -62,7 +64,7 @@ public class TicTacToe {
         int coordinate;
         Scanner coordinateScanner = new Scanner(System.in);
         do {
-            System.out.printf("Enter  %s-coordinate [1..3]:%n", axisName);
+            System.out.printf("Enter  %s-coordinate [1..5]:%n", axisName);
             coordinate = coordinateScanner.nextInt() - 1;
         } while (coordinate < 0 || coordinate >= field.length);
         return coordinate;
@@ -77,27 +79,27 @@ public class TicTacToe {
         int x;
         int y;
         do {
-            x = random.nextInt(3);
-            y = random.nextInt(3);
+            x = random.nextInt(5);
+            y = random.nextInt(5);
         }while (!IsCellEmpty(field, x, y));
         field[y][x] = 'O';
         return field;
     }
     static boolean IsWin(char[][] field, char sign) {
         for (int i = 0; i < field.length; i++) {
-            if (field[i][0] == sign && field[i][1] == sign && field[i][2] == sign) {
+            if (field[i][0] == sign && field[i][1] == sign && field[i][2] == sign && field[i][3] == sign && field[i][4] == sign) {
                 return true;
             }
         }
         for (int i = 0; i < field.length; i++) {
-            if (field[0][i] == sign && field[1][i] == sign && field[2][i] == sign) {
+            if (field[0][i] == sign && field[1][i] == sign && field[2][i] == sign && field[3][i] == sign && field[4][i] == sign) {
                 return true;
             }
         }
-        if (field[0][2] == sign && field[1][1] == sign && field[2][0] == sign) {
+        if (field[0][4] == sign && field[1][3] == sign && field[2][2] == sign && field[3][1] == sign && field[4][0] == sign) {
             return true;
         }
-        if (field[0][0] == sign && field[1][1] == sign && field[2][2] == sign) {
+        if (field[0][0] == sign && field[1][1] == sign && field[2][2] == sign && field[3][3] == sign && field[4][4] == sign) {
             return true;
         }
         return false;
