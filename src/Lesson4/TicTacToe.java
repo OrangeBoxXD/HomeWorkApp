@@ -9,8 +9,8 @@ public class TicTacToe {
         char[][] field = {
                 {EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol},
                 {EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol},
-                {EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol},
-                {EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol},
+              //  {EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol},
+              //  {EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol},
                 {EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol, EmptySlotSymbol}
         };
         DrawMatrix(field);
@@ -26,7 +26,7 @@ public class TicTacToe {
                 System.out.println("GAME OVER");
                 break;
             }
-            DrawMatrix(DoSystemMove(field));
+            DrawMatrix(ImprovedAIMove(field));
             if (IsWin(field, 'O')) {
                 System.out.println("You lost.");
                 System.out.println("GAME OVER");
@@ -64,7 +64,7 @@ public class TicTacToe {
         int coordinate;
         Scanner coordinateScanner = new Scanner(System.in);
         do {
-            System.out.printf("Enter  %s-coordinate [1..5]:%n", axisName);
+            System.out.printf("Enter  %s-coordinate [1..3]:%n", axisName);
             coordinate = coordinateScanner.nextInt() - 1;
         } while (coordinate < 0 || coordinate >= field.length);
         return coordinate;
@@ -79,29 +79,32 @@ public class TicTacToe {
         int x;
         int y;
         do {
-            x = random.nextInt(5);
-            y = random.nextInt(5);
+            x = random.nextInt(3);
+            y = random.nextInt(3);
         }while (!IsCellEmpty(field, x, y));
         field[y][x] = 'O';
         return field;
     }
     static boolean IsWin(char[][] field, char sign) {
         for (int i = 0; i < field.length; i++) {
-            if (field[i][0] == sign && field[i][1] == sign && field[i][2] == sign && field[i][3] == sign && field[i][4] == sign) {
+            if (field[i][0] == sign && field[i][1] == sign && field[i][2] == sign/* && field[i][3] == sign && field[i][4] == sign*/) {
                 return true;
             }
         }
         for (int i = 0; i < field.length; i++) {
-            if (field[0][i] == sign && field[1][i] == sign && field[2][i] == sign && field[3][i] == sign && field[4][i] == sign) {
+            if (field[0][i] == sign && field[1][i] == sign && field[2][i] == sign/* && field[3][i] == sign && field[4][i] == sign*/) {
                 return true;
             }
         }
-        if (field[0][4] == sign && field[1][3] == sign && field[2][2] == sign && field[3][1] == sign && field[4][0] == sign) {
+        if (field[0][2] == sign && field[1][1] == sign && field[2][0] == sign) {
             return true;
         }
-        if (field[0][0] == sign && field[1][1] == sign && field[2][2] == sign && field[3][3] == sign && field[4][4] == sign) {
+        if (field[0][0] == sign && field[1][1] == sign && field[2][2] == sign/* && field[3][3] == sign && field[4][4] == sign*/) {
             return true;
         }
+//        if (field[0][4] == sign && field[1][3] == sign && field[2][2] == sign && field[3][1] == sign && field[4][0] == sign) {
+//            return true;
+//        }
         return false;
     }
 
@@ -115,4 +118,65 @@ public class TicTacToe {
         }
         return true;
     }
+
+    static char[][] ImprovedAIMove(char[][] field) {
+        for (int i = 0; i < 3; i++) {   //Horizontal
+            if (field[i][0] == 'X' && field[i][1] == 'X' && field[i][2] != 'O') {
+                field[i][2] = 'O';
+                return field;
+            }
+            else if (field[i][1] == 'X' && field[i][2] == 'X' && field[i][0] != 'O') {
+                field[i][0] = 'O';
+                return field;
+            }
+            else if (field[i][0] == 'X' && field[i][2] == 'X' && field[i][1] != 'O') {
+                field[i][1] = 'O';
+                return field;
+            }
+            else {
+                for (int j = 0; j < 3; j++) {  //Vertical
+                    if (field[0][j] == 'X' && field[1][j] == 'X' && field[2][j] != 'O') {
+                        field[2][j] = 'O';
+                        return field;
+                    }
+                    else if (field[1][j] == 'X' && field[2][j] == 'X' && field[0][j] != 'O') {
+                        field[0][j] = 'O';
+                        return field;
+                    }
+                    else if (field[0][j] == 'X' && field[2][j] == 'X' && field[1][j] != 'O') {
+                        field[1][j] = 'O';
+                        return field;
+                    }
+                    else {  //Diagonal
+                        if (field[0][0] == 'X' && field[1][1] == 'X' && field[2][2] != 'O') {
+                            field[2][2] = 'O';
+                            return field;
+                        }
+                        else if (field[0][0] == 'X' && field[2][2] == 'X' && field[1][1] != 'O') {
+                            field[1][1] = 'O';
+                            return field;
+                        }
+                        else if (field[2][2] == 'X' && field[1][1] == 'X' && field[0][0] != 'O') {
+                            field[0][0] = 'O';
+                            return field;
+                        }
+                        else if (field[0][2] == 'X' && field[1][1] == 'X' && field[2][0] != 'O') {
+                            field[2][0] = 'O';
+                            return field;
+                        }
+                        else if (field[0][2] == 'X' && field[2][0] == 'X' && field[1][1] != 'O') {
+                            field[1][1] = 'O';
+                            return field;
+                        }
+                        else if (field[2][0] == 'X' && field[1][1] == 'X' && field[0][2] != 'O') {
+                            field[0][2] = 'O';
+                            return field;
+                        }
+                    }
+                }
+            }
+        }
+        return DoSystemMove(field);
+    }
+
 }
